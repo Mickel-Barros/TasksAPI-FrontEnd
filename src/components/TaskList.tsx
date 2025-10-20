@@ -39,10 +39,15 @@ export default function TaskList(){
     saveOrder(tasks.filter(t=>t.id!==id).map(t=>t.id))
   }
 
-  const onToggle = async (id:number, completed:boolean)=>{
+  const onToggle = async (id: number, completed: boolean) => {
+    try {
     await toggleComplete(id, completed)
-    setTasks(prev=>prev.map(t=> t.id===id ? {...t, completed } : t))
+    setTasks(prev => prev.map(t => t.id === id ? { ...t, completed } : t))
+  } catch (error) {
+    console.error('[ERRO] Falha ao atualizar status da tarefa:', error)
   }
+}
+
 
   const sensors = useSensors(useSensor(PointerSensor))
 

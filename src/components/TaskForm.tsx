@@ -8,18 +8,45 @@ export default function TaskForm(){
   const [error, setError] = useState<string | null>(null)
 
   const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError(null)
-    if(!title.trim()){ setError('Título é obrigatório'); return }
-    setLoading(true)
-    try{
-      await createTask({ title: title.trim(), description: description.trim() || undefined })
-      setTitle(''); setDescription('')
-      window.dispatchEvent(new CustomEvent('todo:created'))
-    }catch(err){
-      setError('Falha ao criar a tarefa')
-    }finally{ setLoading(false) }
+  e.preventDefault()
+  setError(null)
+
+  if (!title.trim()) {
+    setError('Título é obrigatório')
+    return
   }
+
+  setLoading(true)
+
+  const payload = {
+    title: title.trim(),
+    description: description.trim() || undefined,
+  }
+
+  try {
+    console.log('[DEBUG] Enviando tarefa:', payload)
+    console.log('URL da API:', import.meta.env.VITE_API_URL);
+
+    const response = await createTask(payload)
+    console.log('[DEBUG] Resposta da API:', response)
+
+    setTitle('')
+    setDescription('')
+    window.dispatchEvent(new CustomEvent('todo:created'))
+
+  } catch (err: any) {
+    console.error('[ERRO] Falha ao criar tarefa:')
+    console.error('Mensagem:', err.message)
+    console.error('Código:', err.code)
+    console.error('Status:', err.response?.status)
+    console.error('Dados da resposta:', err.response?.data)
+    console.error('Configuração:', err.config)
+    
+    setError('Falha ao criar a tarefa')
+  } finally {
+    setLoading(false)
+  }
+}
 
   return (
     <form onSubmit={onSubmit} className="space-y-4">
