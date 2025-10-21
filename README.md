@@ -26,17 +26,30 @@ src/
  ├── main.tsx                # Ponto de entrada do React
  ├── App.tsx                 # Configuração de rotas e layout principal
  ├── components/             # Componentes reutilizáveis
- │    ├── TaskItem.tsx 
- │    ├── TaskCard.tsx
+ │    ├── ErrorBoundary.tsx
  │    ├── TaskForm.tsx
- │    └── ErrorBoundary.tsx
+ │    ├── TaskItem.tsx
+ │    └── TaskList.tsx
  ├── hooks/                  # Hooks personalizados
- │    └── useTasks.ts
+ │    ├── useCreateTask.ts
+ │    ├── useTasks.ts
+ │    ├── useTaskDND.ts
+ │    └── useTaskForm.ts
+ ├── pages/                  # Páginas da aplicação
+ │    ├── Home.tsx
+ │    ├── TaskList.tsx
+ │    └── TaskEdit.tsx
  ├── services/               # Integração com API
  │    └── api.ts
  ├── styles/                 # Configurações Tailwind e estilos globais
  ├── tests/                  # Testes unitários e de integração
+ │    ├── TaskForm.test.tsx
+ │    ├── TaskItem.test.tsx
+ │    ├── useCreateTask.test.ts
+ │    ├── useTaskDND.test.ts
+ │    └── useTasks.test.ts
  └── types/                  # Definições de tipos TypeScript
+      └── tasks.ts
 ```
 
 ---
@@ -111,7 +124,6 @@ npx jest
 | `npm start` | Executa build em produção |
 | `npx jest` | Roda testes Jest |
 | `npm run lint` | Lint do projeto (ESLint + Prettier) |
-| `npm run storybook` | Inicia Storybook (opcional) |
 
 ---
 
@@ -128,16 +140,6 @@ interface Task {
   deletedAt?: string;
 }
 ```
-
----
-
-## 🌐 Storybook (opcional)
-
-Visualização de componentes isolados:  
-👉 **`/storybook`**
-
-Gerado com **Storybook** para desenvolvimento e documentação de componentes.
-
 ---
 
 ## 📚 Referências
@@ -148,6 +150,5 @@ Gerado com **Storybook** para desenvolvimento e documentação de componentes.
 - [React Query Docs](https://tanstack.com/query/)
 - [React Router Docs](https://reactrouter.com/)
 - [Vite Docs](https://vitejs.dev/)
-- [Storybook Docs](https://storybook.js.org/)
 
 ---
