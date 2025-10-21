@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for hooks/useTaskDnD.ts</title>
+    <title>Code coverage report for hooks/useCreateTask.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
@@ -19,27 +19,27 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../index.html">All files</a> / <a href="index.html">hooks</a> useTaskDnD.ts</h1>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">hooks</a> useCreateTask.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>15/15</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
@@ -86,69 +86,51 @@
 <a name='L21'></a><a href='#L21'>21</a>
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
-<a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a>
-<a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L24'></a><a href='#L24'>24</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback } from 'react'
-import { DndContextProps, DragEndEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
-import { arrayMove } from '@dnd-kit/sortable'
-import { TaskDTO } from '../types/task'
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useState } from 'react'
+import { createTask } from '../api'
 &nbsp;
-interface UseTaskDnDProps {
-  tasks: TaskDTO[]
-  setTasks: React.Dispatch&lt;React.SetStateAction&lt;TaskDTO[]&gt;&gt;
-  saveOrder: (order: number[]) =&gt; void
-}
+export function useCreateTask() {
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState&lt;string | null&gt;(null)
 &nbsp;
-export function useTaskDnD({ tasks, setTasks, saveOrder }: UseTaskDnDProps) {
-  const sensors = useSensors(useSensor(PointerSensor))
+  async function handleCreateTask(payload: { title: string; description?: string }) {
+    setLoading(true)
+    setError(null)
+    try {
+      await createTask(payload)
+      window.dispatchEvent(new CustomEvent('todo:created'))
+    } catch (err) {
+      setError('Falha ao criar a tarefa')
+      throw err
+    } finally {
+      setLoading(false)
+    }
+  }
 &nbsp;
-  const handleDragEnd = useCallback((event: DragEndEvent) =&gt; {
-    const { active, over } = event
-    if (!over || active.id === over.id) return
-&nbsp;
-    setTasks(prev =&gt; {
-      const oldIndex = prev.findIndex(i =&gt; i.id === active.id)
-      const newIndex = prev.findIndex(i =&gt; i.id === over.id)
-      const newArr = arrayMove(prev, oldIndex, newIndex)
-      saveOrder(newArr.map(t =&gt; t.id))
-      return newArr
-    })
-  }, [saveOrder])
-&nbsp;
-  return { sensors, handleDragEnd }
+  return { handleCreateTask, loading, error }
 }
 &nbsp;</pre></td></tr></table></pre>
 
